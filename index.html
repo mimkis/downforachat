@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WHATEVER</title>
+
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="global.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orienta&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="starter-screen">
+    <div class="title opacity-0">Hi Calacalabumbum,<br> down for a chat?</div>
+    <div class="description opacity-0">
+      A website for when you ran out of things to talk about, or if you're just genuinely bad at conversation, or if you just feel like it. Grab a drink, have a snack, and get cozy!</div>
+    <div class="start-button-container">
+      <button class="start-button">
+        <span class="start-button-text opacity-0">Play</span>
+      </button>
+    </div>
+  </div>
+
+  <button id="theme-toggle" class="theme-btn">
+    <div class="theme-btn-outer ">
+     <div class="theme-btn-inner "></div>
+    </div>
+  </button>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  
+  <script>
+    const toggleBtn = document.getElementById('theme-toggle');
+    toggleBtn.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+    });
+  </script>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const card = document.querySelector('.starter-screen');
+      const titleEl = document.querySelector('.title');
+      const descEl = document.querySelector('.description');
+      const btnTextEl = document.querySelector('.start-button-text');
+      const startBtn = document.querySelector('.start-button');
+
+      const tl = gsap.timeline();
+
+      tl.to(card, {
+        clipPath: 'inset(0% 0% 0% 0%)',
+        duration: 1.8,
+        ease: "power3.out"
+      })
+      .to(titleEl, {
+        opacity: 1,
+        duration: 1.2,
+        ease: "power2.out" 
+      }, "-=1.0")
+      .to(descEl, {
+        opacity: 1,
+        duration: 1.2,
+        ease: "power2.out"
+      }, "-=0.6")
+      .to(btnTextEl, {
+        opacity: 1,
+        duration: 0.8,
+        ease: "power2.out"
+      }, "-=0.9");
+
+      startBtn.addEventListener('click', () => {
+        const exitTl = gsap.timeline();
+        
+        exitTl.to([titleEl, descEl, btnTextEl], {
+          opacity: 0,
+          duration: 0.4,
+          stagger: 0.05,
+          ease: "power2.in"
+        })
+        .to(card, {
+          clipPath: 'inset(0% 0% 100% 100%)',
+          duration: 1.2,
+          ease: "power3.inOut",
+          onComplete: () => {
+            window.location.href = 'game.html';
+          }
+        }, "-=0.2");
+      });
+    });
+  </script>
+</body>
+</html>

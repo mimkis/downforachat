@@ -1,0 +1,108 @@
+/*---------- Global Styles ----------*/
+:root {
+  --primary1: #000000;
+  --primary2: #FFFFFF;
+  --primary3: #686868;
+  --btn-hover: #ffffff;
+}
+
+body.dark-mode {
+  --primary1: #FFFFFF; 
+  --primary2: #000000; 
+  --primary3: #838383;
+  --btn-hover: #ffffff;
+}
+
+html {
+  font-size: max(1.2vmin, 0.75vmax);
+  font-family: "Only Sans", sans-serif;
+  overflow: hidden
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-optical-sizing: auto;
+  text-wrap: pretty;
+}
+
+@font-face {
+  font-family: "Only Sans"; 
+  src: url("fonts/OnlysansTRIAL-Regular.otf") format("opentype"); 
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Only Sans"; 
+  src: url("fonts/OnlysansTRIAL-Italic.otf") format("opentype"); 
+  font-style: italic;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Only Sans"; 
+  src: url("fonts/OnlysansTRIAL-Bold.otf") format("opentype"); 
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Only Sans"; 
+  src: url("fonts/OnlysansTRIAL-BoldItalic.otf") format("opentype"); 
+  font-style: italic;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Only Sans"; 
+  src: url("fonts/OnlysansTRIAL-Light.otf") format("opentype"); 
+  font-style: normal;
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: "Only Sans"; 
+  src: url("fonts/OnlysansTRIAL-LightItalic.otf") format("opentype"); 
+  font-style: italic;
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: "Only Sans"; 
+  src: url("fonts/OnlysansTRIAL-Medium.otf") format("opentype"); 
+  font-style: normal;
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "Only Sans"; 
+  src: url("fonts/OnlysansTRIAL-MediumItalic.otf") format("opentype"); 
+  font-style: italic;
+  font-weight: 500;
+}
+
+.roboto-mono-bold {
+  font-family: "Roboto Mono", monospace;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.roboto-mono-regular {
+  font-family: "Roboto Mono", monospace;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.roboto-mono-light {
+  font-family: "Roboto Mono", monospace;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+}
+
+/*---------- Theme Toggle Button- move to individual sheet ----------*/
+
