@@ -5,7 +5,6 @@ let mockCards = [];
 let currentCard = null;
 let typeTween = null; 
 
-// Use a Set to track multiple active categories
 let activeCategories = new Set(['All']); 
 
 const typePillEl = document.querySelector('.questions-type');
@@ -14,34 +13,43 @@ const questionsWrapper = document.querySelector('.questions-wrapper');
 const questionsListEl = document.querySelector('.questions-list');
 
 // ==========================================
+// 2. LOCAL STORAGE LOGIC
+// ==========================================
+// Saves current drawn/striken arrays to the browser
+function saveProgress() {
+  const drawn = mockCards.filter(c => c.isDrawn).map(c => c.text);
+  const striken = mockCards.filter(c => c.isStriken).map(c => c.text);
+  localStorage.setItem('drawnCards', JSON.stringify(drawn));
+  localStorage.setItem('strikenCards', JSON.stringify(striken));
+}
+
+// Optional: Run `localStorage.clear()` in your browser console to reset the game
+
+// ==========================================
 // 3. CARD DRAWING LOGIC
 // ==========================================
 function drawRandomCard() {
   const availableCards = mockCards.filter(card => {
-    // Treat an empty set as showing 'All'
     const matchesCategory = activeCategories.size === 0 || activeCategories.has('All') || activeCategories.has(card.type);
-    return !card.isStriken && matchesCategory;
+    return !card.isStriken && !card.isDrawn && matchesCategory; 
   });
 
   if (availableCards.length === 0) {
     if (typePillEl) typePillEl.textContent = "Empty";
-    if (questionTextEl) questionTextEl.textContent = "No questions match your current filters!";
+    if (questionTextEl) questionTextEl.textContent = "It's been nice talking to you, wanna hangout next weekend;)?";
     currentCard = null;
     return; 
   }
 
-  let randomCard;
-  
-  if (availableCards.length === 1) {
-    randomCard = availableCards[0];
-  } else {
-    do {
-      const randomIndex = Math.floor(Math.random() * availableCards.length);
-      randomCard = availableCards[randomIndex];
-    } while (currentCard && randomCard.text === currentCard.text);
-  }
+  const randomIndex = Math.floor(Math.random() * availableCards.length);
+  const randomCard = availableCards[randomIndex];
 
+  randomCard.isDrawn = true;
+  randomCard.isStriken = true; // Mark it as striken in the database
   currentCard = randomCard;
+  
+  saveProgress(); // Save to local storage
+  populateQuestionsList(); // Force the overlay list to visually update
 
   if (typePillEl && questionTextEl) {
     typePillEl.textContent = currentCard.type;
@@ -93,12 +101,11 @@ categoryPills.forEach(pill => {
       const allAreStricken = mockCards.length > 0 && mockCards.every(card => card.isStriken);
       const willStrikeAll = !allAreStricken;
 
-      // Toggle strike all / select all
       mockCards.forEach(card => card.isStriken = willStrikeAll);
+      saveProgress(); 
       
       activeCategories.clear();
       
-      // Highlight 'All' ONLY when selecting all questions (un-striking them)
       if (!willStrikeAll) {
         activeCategories.add('All');
       }
@@ -154,6 +161,7 @@ function populateQuestionsList() {
     const toggleStrike = () => {
       item.classList.toggle('active');
       card.isStriken = item.classList.contains('active');
+      saveProgress(); 
 
       if (card.isStriken && currentCard && currentCard.text === card.text) {
         drawRandomCard();
@@ -183,6 +191,9 @@ window.addEventListener('DOMContentLoaded', () => {
       return header.replace(/^\uFEFF/, '').trim();
     },
     complete: function(results) {
+      const savedDrawn = JSON.parse(localStorage.getItem('drawnCards') || '[]');
+      const savedStriken = JSON.parse(localStorage.getItem('strikenCards') || '[]');
+
       mockCards = results.data.map(row => {
         const rawType = row["Type"] || row["type"] || row[" Type"];
         const rawText = row["Question"] || row["question"] || row[" Question"];
@@ -190,7 +201,8 @@ window.addEventListener('DOMContentLoaded', () => {
         return {
           type: rawType || "Uncategorized",     
           text: rawText || "Missing Question text", 
-          isStriken: false       
+          isStriken: savedStriken.includes(rawText),       
+          isDrawn: savedDrawn.includes(rawText)
         };
       });
 
